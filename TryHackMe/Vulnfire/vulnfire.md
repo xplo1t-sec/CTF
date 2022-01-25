@@ -51,11 +51,11 @@ On visiting the website at http://IP we are presented the default Apache web pag
 We find two interesting results:
 * security.php
 	* Upon visiting this page, we are taken to `/op_security.php?cmd=`
-* string.txt
+* somerandomhiddenfilethatyoucantfind48685475814.txt
 ```txt
 	Steganography is super awesome and l337 techinque. 
 
-	Xplo1t_H3llf1re_are_l337
+	Xp********************37
 ```
 Okay, so we need to do some form of steganography based on the hint above. Let's save this weird string somewhere accessible. We might need it later.
 
@@ -85,7 +85,7 @@ what's inside `confidential.zip`
 
 # Unravelling the data!
 * So we have to do steganography on this `fire.jpg` file
-* When using steghide to extract from the image, we are asked a passphrase. Try using the weird string `************************` we found in string.txt on the web server.
+* When using steghide to extract from the image, we are asked a passphrase. Try using the weird string `Xp********************37` we found in string.txt on the web server.
 
 ![steghide.png](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Vulnfire/images/steghide.png)
 
