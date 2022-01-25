@@ -8,7 +8,7 @@
 There was some problem with nmap and because of that it wasn't able to show all the open ports. [Rushi](https://iamrushi.cf/) suggested to me that I use Rustscan.
 ### Rustscan
 
-![img-rustscan](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/Zeno/images/rustscan.png)
+![img-rustscan](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Zeno/images/rustscan.png)
 
 Found few more ports. So now I redid the nmap scan on these ports:
 ```js
@@ -44,24 +44,24 @@ We have time based SQLi. After some time, here is the info:
 * Database Name: dbrms
 * Found some tables: 
   
-![img-sqlmap-tables](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/Zeno/images/sqlmap-tables.png)
+![img-sqlmap-tables](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Zeno/images/sqlmap-tables.png)
 
 
 I couldn't find anything useful from the database. And it takes a lot of time. So let's see if there's other vulnerabilities.
 The website displays the username(first-name). Try checking for xss and SSTI
 Could not find SSTI but it has stored XSS. Set the payload to ` ${{4*4}}<img src=x onerror=alert(1)> `
 
-![img-stored-xss](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/Zeno/images/stored-xss.png)
+![img-stored-xss](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Zeno/images/stored-xss.png)
 
 Let's see if we can steal the cookies of other users. Upload a cookie stealer payload this time.
-![img-cookie-stealer](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/Zeno/images/cookie-stealer.png)
+![img-cookie-stealer](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Zeno/images/cookie-stealer.png)
 
 Now I logged in with this account and, did some actions on the website in hopes of getting a hit by other users so that I can grab their cookies. I did not get any hits. So its safe to say that there's no other user that would visit my profile. Let's check for other exploits.
 
 ### Searching for exploits:
 Search for Restaurant Management System exploits in searchsploit.
 
-![img-rms-exploit](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/Zeno/images/rms-exploit.png)
+![img-rms-exploit](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Zeno/images/rms-exploit.png)
 
 We get a webshell uploaded. Use the `?cmd= param` for command execution.
 
@@ -108,7 +108,7 @@ I tried these passwords on edward's account but couldn't login.
 ### Linpeas
 Now let's run Linpeas
 
-![img-linpeas](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/Zeno/images/linpeas.png)
+![img-linpeas](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Zeno/images/linpeas.png)
 
 We have write privileges on `/etc/systemd/system/zeno-monitoring.service`
 Also found new creds.
@@ -124,7 +124,7 @@ Let's add the SUID bit on `/bin/bash` for an easy privesc. Change the ExecStart 
 ExecStart=/usr/bin/chmod +x /bin/bash
 ```
 
-![img-zeno-service](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/Zeno/images/zeno-service.png)
+![img-zeno-service](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Zeno/images/zeno-service.png)
 
 Now when this service starts again, we will have a SUID `/bin/bash`. We can make that happen if we can somehow restart it. But we don't have permissions to do that as a low privileged user. Another way to make it happen is if we can somehow reboot the system.
 I tried to reboot the system but couldn't. It required root privileges to reboot.
@@ -132,9 +132,9 @@ I tried to reboot the system but couldn't. It required root privileges to reboot
 Let's try the password found earlier (`FrobjoodAdkoonceanJa`) on user `edward`. We successfully login as edward 🎉
 Checking for `sudo -l` permissions on edward, we see that he can reboot the system.
 
-![img-edward-sudo](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/Zeno/images/edward-sudo.png)
+![img-edward-sudo](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Zeno/images/edward-sudo.png)
 
 Reboot the machine with `sudo /usr/sbin/reboot` and now when the system is fully rebooted, login as edward through ssh. We now have a SUID `/bin/bash`. Use it to escalate privileges to **root**
 
-![img-root](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/Zeno/images/root.png)
+![img-root](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Zeno/images/root.png)
 
