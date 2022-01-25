@@ -36,7 +36,9 @@ Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
 - We can login with anonymous:anonymous credentials
 - Listing the files using `ls -la` we see there are two files `confidential.zip` and `note.txt`
 - Download the files to local system using `mget *` command
- ![[./images/img-ftp.png]]
+ 
+ ![ftp.png](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Vulnfire/images/ftp.png)
+
 - Contents of note.txt file:
 ```txt
 1) Enumerate your webserver to find a file 
@@ -59,7 +61,9 @@ Okay, so we need to do some form of steganography based on the hint above. Let's
 
 Let's check whats up with `/op_security.php` file.
 The source of the page contains the following message:
-![[./images/params.png]]
+
+![params.png](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Vulnfire/images/params.png)
+
 So these are possibly parameters where one of them is an actual parameter vulnerable to command injection. Download the parameters from the webpage and save it to a file. I used some grep and regex magic to save it with this one liner. Change the IP address accordingly:
 ```bash
 curl -s http://10.10.250.99/op_security.php | grep -v '<\|>\|!\|^$' > params.txt
@@ -70,15 +74,21 @@ Now, lets fuzz these parameters with ffuf. I will filter out normal responses wi
 ffuf -u http://10.10.250.99/op_security.php?FUZZ=id -w ./params.txt -fs 602
 ```
 The malicious parameter is the correct parameter
-![[./images/param-fuzz.png]]
+
+![param-fuzz.png](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Vulnfire/images/param-fuzz.png)
+
 
 At this point, we can get a shell on the system.  Let's first check 
 what's inside `confidential.zip` 
-![[./images/confidential-zip.png]]
+
+![confidential-zip.png](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Vulnfire/images/confidential-zip.png)
+
 # Unravelling the data!
 * So we have to do steganography on this `fire.jpg` file
 * When using steghide to extract from the image, we are asked a passphrase. Try using the weird string `************************` we found in string.txt on the web server.
-![[./images/steghide.png]]
+
+![steghide.png](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Vulnfire/images/steghide.png)
+
 * We get credentials in the form of ciphertext. Check the note and it hints towards some vi... cipher. Try with Vigenere cipher. Let's use CyberChef to do this. CyberChef is a handy tool made for things just like these.
 * But we need a key to decode the cipher. If you notice, the word 'Think' is quoted in creds.txt. Use this as key and we now have a password `***********************`
 * Let's use this password to login as `hellfire` user.
@@ -94,7 +104,9 @@ It says there is someone named vulnfire1337 posting about Vulnfire.Inc on social
 # OSINT ftw!
 There is a user with this name on Twitter. Visit the profile at https://twitter.com/vulnfire1337. There is a post about a password hash dump that links to pastebin at https://pastebin.com/TKRLXK8u
 If at the time you're solving this room, the twitter account gets deleted, you can check https://web.archive.org for past snapshots :)
-![[./images/vulnfire1337-twitter.png]]
+
+![vulnfire1337-twitter.png](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Vulnfire/images/vulnfire1337-twitter.png)
+
 It mentions that the passwords are 25 characters long. But don't worry. Long passwords don't always mean strong passwords. If these passwords belong to password dictionaries such as rockyou.txt, it's a kids game to crack them. We can use hashcat to crack the hashes. If you have problems identifying the hash type, you can use tools like [Search-That-Hash](https://github.com/HashPals/Search-That-Hash)
 It identifies the hash as SHA-256. Use mode 1400 for this hash type on hashcat.
 ```bash
@@ -105,7 +117,9 @@ After cracking, store the passwords in a text file. I have used the `cut` linux 
 hashcat -a 0 -m 1400 hashes /home/rockyou.txt --show | cut -d ':' -f 2 > passwords.txt
 ```
 We will now use hydra to brute force these passwords and login as xploit user.
-![[./images/hydra-brute.png]]
+
+![hydra-brute.png](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Vulnfire/images/hydra-brute.png)
+
 Login as xploit with the found password. Now its time to enumerate.
 There is a hidden folder `.bak` in `/var/backups`. This directory is not present by default. There is a compressed file inside of it.
 ```bash
@@ -127,7 +141,9 @@ If you look closely among the pcap files, the file `secret4.pcap` contains a log
 http.response.code!=200
 ```
 With correct credentials, the website redirects the user to `dashboard.php` . With the above filter, there will be only one result. Follow the HTTP stream of that packet:
-![[./images/img-follow-http.png]]
+
+![follow-http.png](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/Vulnfire/images/follow-http.png)
+
 
 We have the password
 ```txt
