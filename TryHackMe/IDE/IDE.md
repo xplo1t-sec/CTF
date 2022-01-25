@@ -66,7 +66,7 @@ It hints us about two things:
 * Port <span style="color:lightgreen">80</span>: It has the default apache webpage. After directory busting, there we couldn't find anything useful.
 * Port <span style="color:lightgreen">62337</span>: We get a login page of Codiad (version: 2.8.4). Codiad is a web-based IDE and code editor. 
    
- ![codiad-login](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/IDE/images/codiad-login.png)
+ ![codiad-login](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/IDE/images/codiad-login.png)
 
 From above, we know that the user `john` has default password. I tried some passwords and was able to login with the creds: <span style="color:lightgreen">**john**</span> : <span style="color:lightgreen">**password**</span>.
 
@@ -91,27 +91,27 @@ Shellcodes: No Results
 ```
 
 For me, the last exploit worked after some tweaking.
-![modify-exploit](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/IDE/images/modify-exploit.png)
+![modify-exploit](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/IDE/images/modify-exploit.png)
 
 Run the exploit:
-![exploit](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/IDE/images/exploit.png)
+![exploit](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/IDE/images/exploit.png)
 Set the path for Codiad as `/` and the name of the actual project as `xplo1t` (we have already created a project of this name earlier. Remember?)
 This will upload a webshell `shell.php` in `/xplo1t/shell.php`
 
-![webshell](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/IDE/images/webshell.png)
+![webshell](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/IDE/images/webshell.png)
 
 We now have a shell as `www-data`
 To get a proper shell, I used one of the reverse shells from [Revshells](https://www.revshells.com/)
 In the `.bash_history` file of the user `drac` , I found the password.
-![creds-drac](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/IDE/images/creds-drac.png)
+![creds-drac](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/IDE/images/creds-drac.png)
 
 Switch to drac with this password (Password reuse).
 User drac can run as sudo the following:
-![drac-sudo](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/IDE/images/drac-sudo.png)
+![drac-sudo](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/IDE/images/drac-sudo.png)
 
 Check for files related to the vsftpd service:
-![vsftpd-service](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/IDE/images/vsftpd-service.png)
+![vsftpd-service](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/IDE/images/vsftpd-service.png)
 The file `/lib/systemd/system/vsftpd.service` is writable by drac. Let's change the service file and make `/bin/bash` a SUID so that we can get root.
 
 This is how we can do it:
-![root](https://raw.githubusercontent.com/Manash404/CTF/main/TryHackMe/IDE/images/root.png)
+![root](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/IDE/images/root.png)
