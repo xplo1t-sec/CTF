@@ -1,0 +1,3 @@
+- The word domain is stripped from the input. 
+- We can enter the payload as `" autofocus onfocus="alert(document.domdomainain)"` instead of simply `" autofocus onfocus="alert(document.domain)"`
+- The word `domdomainain` has the word domain within it. So it will get stripped and we will be left with the word `dom`+`ain` because the stripping is not performed recursively.

