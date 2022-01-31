@@ -1,0 +1,4 @@
+- There is a filter that strips off special characters
+- The input `"><script>alert(document.domain)</script>` changes to `scriptalert(document.domain)/script`
+- Tried with HTML encode of the special chars `&#x22;&#x3e;&#x3c;script&#x3e;alert(document.domain)&#x3c;/&#x3e;script&#x3e;` but didn't work.
+- Requires IE for solving

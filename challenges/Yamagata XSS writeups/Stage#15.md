@@ -1,0 +1,4 @@
+- It uses `document.write()` to add the input into the document.
+- Simply trying enter `<script>alert(document.domain)</script>` gets encoded.
+- Try with unicode escapes (I used hackvertor) with `<` as `\u003C` and `>` as `\u003E` but the `\` character gets trimmed. Try with double `\\` like `\\u003C` and `\\u003E` and it works.
+- Final payload: `test\\u003Cscript\\u003Ealert(document.domain)\\u003C/script\\u003E`
