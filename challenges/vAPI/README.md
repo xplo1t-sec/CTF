@@ -1,3 +1,9 @@
+# vAPI
+> vAPI is Vulnerable Adversely Programmed Interface which is Self-Hostable API that mimics OWASP API Top 10 scenarios in the means of Exercises.
+>
+> https://github.com/roottusk/vapi
+
+---
 
 ## API 1 [Broken Object Level Authorization]
 > You can register yourself as a User , Thats it ....or is there something more?
@@ -40,7 +46,7 @@ Response =>
 Simillarly, we can check the admin user account's details by changing the user ID to `1`.
 We have flag 1: `flag{api1_d0cd9be2324cc237235b}`
 
-![[flag1.png]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/flag1.png)
 
 Simillarly, we can also update other user's details. Let's change the account details of the admin account. 
 
@@ -53,7 +59,7 @@ Request => "PUT http://{{host}}/vapi/api1/user/1"
 }
 ```
 
-![[1-pwned-admin.png]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/1-pwned-admin.png)
 
 This is a **BOLA** vulnerability. We can access (and even modify) objects we are not authorized to access.
 
@@ -65,7 +71,7 @@ This is a **BOLA** vulnerability. We can access (and even modify) objects we are
 We have credential dump with emails and passwords. The API does not have any form of rate limiting in the login. This is an example of Broken User Authentication. We can perform credential stuffing with each entry from the list using Burp Intruder's `Pitchfork` attack.
 Attack output:
 
-![[2-bruteforce.png]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/2-bruteforce.png)
 
 Found valid creds:
 
@@ -83,7 +89,7 @@ Req => "GET http://{{host}}/vapi/api2/user/details"
 
 This gives us flag2: `flag{api2_6bf2beda61e2a1ab2d0a}`
 
-![[flag2.png]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/flag2.png)
 
 
 ---
@@ -93,24 +99,24 @@ This gives us flag2: `flag{api2_6bf2beda61e2a1ab2d0a}`
 
 First we need to install the android app shared in the resources folder. We have to enter the base url of the vapi application. Enter the IP address of the device running the vapi.
 
-![[3-base-url.jpg]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/3-base-url.jpg)
 
 We now need to configure the burpsuite proxy to be able to intercept the HTTP traffic on our android device. Follow up this tutorial by Portswigger [here](https://portswigger.net/support/configuring-an-android-device-to-work-with-burp).
 
 After everything is configured, let's register a user:
 
 
-![[3-register-user.jpg]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/3-register-user.jpg)
 
-![[3-login-burp.png]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/3-login-burp.png)
 
 Now, login as the user. At first look, we see a few comments posted by the other users.
 
-![[3-comments.jpg]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/3-comments.jpg)
 
 However, when we check the intercepted traffic on burpsuite proxy, we see more than the comments data.
 
-![[flag3.png]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/flag3.png)
 
 The application exposes it's users' sensitive information such as their location coordinates. We also find our flag 3 in the device ID of user baduser007.
 Flag 3: `flag{api3_0bad677bfc504c75ff72}`
@@ -138,13 +144,13 @@ Okay, there is an OTP protection. We have to submit the 4-digit OTP sent to the 
 
 Submitting any invalid OTP gives us "Invalid OTP" error message. We can try Burp's Intruder to brute force the OTP.
 
-![[4-otp-bruteforce.png]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/4-otp-bruteforce.png)
 
 We have successfully enumerated the correct OTP: `1872`.
 Send this OTP from the Postman client.
 Time for us to get the account details of the newly compromised user.
 
-![[flag4.png]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/flag4.png)
 
 We get flag4: `flag{api4_ce696239323ea5b2d015}`
 
@@ -189,11 +195,11 @@ Response =>
 
 It was mentioned above in the description that admins often use different routes. We can fuzz for possible endpoints:
 
-![[5-fuzz-endpoints.png]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/5-fuzz-endpoints.png)
 
 The endpoint `/vapi/api5/users` looks promising. Let's send the request on our Postman client with the proper authorization headers.
 
-![[flag5.png]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/flag5.png)
 
 We get all the users' details along with the admin user's account details which contain our flag 5: `flag{api5_76dd990a97ff1563ae76}`.
 
@@ -254,7 +260,7 @@ Response =>
 
 Now, when we retrieve the account details of this account, we see that the credits has been successfully set at the time of account registration. This is an example of Mass Assignment.
 
-![[flag6.png]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/flag6.png)
 
 We also get our flag 6: `flag{api6_afb969db8b6e272694b4}`
 
@@ -311,7 +317,7 @@ PHPSESSID=b2c9d5058ee32faab05a0de61575533b
 
 Now, when we load the page, we get the flag displayed in the alert as shown below:
 
-![[flag7.png]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/flag7.png)
 
 We get the flag: `flag{api7_e71b65071645e24ed50a}`
 
@@ -322,12 +328,12 @@ We get the flag: `flag{api7_e71b65071645e24ed50a}`
 
 As the name suggests, we have to perform an injection attack. We are not given any login credentials. We get `IncorrectUsernameOrPassword` error when sending incorrect credentials. If we inject a single quote in either username or password, we get this specific SQL error:
 
-![[8-sql-error.png]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/8-sql-error.png)
 
 The login can be bypassed by using the payload `' or 1-- -` on either of the fields.
 Now, we simply need to make another request to `http://{{host}}/vapi/api8/user/secret` to get the user's secret.
 
-![[flag8.png]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/flag8.png)
 
 Flag 8: `flag{api8_509f8e201807860d5c91}`
 
@@ -349,7 +355,7 @@ The API implements the X-RateLimit header. There is rate limit protection of 5 r
 
 However, we can also send a request to the `/v1` version of the API. This endpoint does not have any Ratelimit protection. We can use Burp intruder to brute force the pin.
 
-![[flag9.png]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/flag9.png)
 
 Flag 9: `flag{api9_81e306bdd20a7734e244}`
 
@@ -360,6 +366,6 @@ Flag 9: `flag{api9_81e306bdd20a7734e244}`
 
 There isn't anything to exploit
 
-![[flag10.png]]
+![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/flag10.png)
 
 Flag 10: `flag{api10_5db611f7c1ffd747971f}`
