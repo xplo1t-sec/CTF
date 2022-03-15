@@ -64,7 +64,7 @@ It accepts different syntax options for the text such as:
 This made me check for other ways I can play with the text. In this process, I found out that URLs were shown in the markdown format of `[link text](URL of link)`
 For example: `http://example.com` would become `[http://example.com](http://example.com)`
 
-In markdown, we can include remote images with the syntax of `![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/HackTheBox/machines/Devzat/images/URL of image)`. I tried to fetch remote files with this technique and was successful in making a server side request to my python http server. This can be a potential SSRF attack surface.
+In markdown, we can include remote images with the syntax of `![](URL of image)`. I tried to fetch remote files with this technique and was successful in making a server side request to my python http server. This can be a potential SSRF attack surface.
 
 ![](https://raw.githubusercontent.com/xplo1t-sec/CTF/master/HackTheBox/machines/Devzat/images/remote-fetch-possible.png)
 
